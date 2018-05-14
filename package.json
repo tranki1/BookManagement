@@ -1,10 +1,12 @@
 {
   "dependencies": {
+    "material-ui": "^1.0.0-beta.47",
     "prop-types": "^15.6.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-loader-advanced": "^1.7.1",
     "react-router-dom": "^4.2.2",
+    "react-transition-group": "^1.2.1",
     "sortby": "0.0.2"
   },
   "devDependencies": {

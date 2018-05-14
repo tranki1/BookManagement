@@ -172,3 +172,39 @@ body, .app {
   text-align: center;
   font-size: 0.8em;
 }
+
+/*transition for book*/
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+.book-cover-title li {
+  float: left;
+  box-sizing: border-box;
+}
+
+
+.book-transition-enter {
+  opacity: 0.01;
+  width: 0px;
+}
+
+.book-transition-enter.book-transition-enter-active {
+  opacity: 1;
+  width: 170px;
+  transition: opacity 500ms ease-in;
+}
+
+.book-transition-leave {
+  opacity: 1;
+  width: 170px;
+}
+
+.book-transition-leave.book-transition-leave-active {
+  opacity: 0.01;
+  width: 0px;
+  transition: opacity 300ms ease-in;
+}
