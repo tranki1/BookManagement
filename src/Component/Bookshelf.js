@@ -28,7 +28,7 @@ export const getShelfTypeName = (typeID) => {
 class Bookshelf extends Component{
 
   render(){
-    const {books, updateBook, typeOfShelves} = this.props;
+    const {books, onUpdateBook} = this.props;
     return(
       <ol className="books-grid">
         {books.map((book)=>(
@@ -38,7 +38,7 @@ class Bookshelf extends Component{
                 <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: 'url("http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api")' }}></div>
                 <div className="book-shelf-changer">
                   <select
-                    onChange ={(e)=> updateBook(book,e.target.value)}
+                    onChange ={(e)=> onUpdateBook(book,e.target.value)}
                     value={book.shelf}>
                     <option disabled>Move to...</option>
                     {getShelfTypes().map((shelf)=>(
@@ -61,7 +61,7 @@ class Bookshelf extends Component{
 Bookshelf.propTypes = {
   books: PropTypes.array.isRequired,
   typeID: PropTypes.oneOf(SHELF_TYPE_IDS),
-  updateBook: PropTypes.func.isRequired
+  onUpdateBook: PropTypes.func.isRequired
 }
 
 export default Bookshelf;

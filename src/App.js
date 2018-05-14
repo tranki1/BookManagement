@@ -24,6 +24,16 @@ class BooksApp extends React.Component {
     });
   }
 
+  updateBook =(book,shelf) =>{
+    if (this.state.books) {
+      BooksAPI.update(book,shelf).then(()=>{
+        book.shelf=shelf;
+        this.setState(state => ({books:state.books.filter(b=>b.id !==book.id).concat([book])
+      }));
+    });
+  }
+};
+
   render() {
     return (
       <div className="app">
@@ -65,6 +75,7 @@ class BooksApp extends React.Component {
                     <Bookshelf
                       books={this.state.books.filter((book) => book.shelf===shelf)}
                       typeID={shelf}
+                      onUpdateBook={this.updateBook}
                     />
                   </div>
                 ))}
