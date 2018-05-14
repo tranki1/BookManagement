@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link, Route} from 'react-router-dom'
+import sortBy from 'sort-by'
 import * as BooksAPI from './BooksAPI'
 import Bookshelf, {getShelfTypes,getShelfTypeName} from './Component/Bookshelf'
 import Search from './Component/Search'
@@ -56,7 +57,7 @@ class BooksApp extends React.Component {
                   <div key='shelf' className="bookshelf">
                     <h2 className="bookshelf-title">{getShelfTypeName(shelf)}</h2>
                     <Bookshelf
-                      books={this.state.books.filter((book) => book.shelf===shelf)}
+                      books={this.state.books.filter((book) => book.shelf===shelf).sort(sortBy('title'))}
                       typeID={shelf}
                       onUpdateBook={this.updateBook}
                     />

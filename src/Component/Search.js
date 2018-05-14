@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
+import sortBy from 'sort-by';
 import Bookshelf from '../Component/Bookshelf';
 import * as BooksAPI from '../BooksAPI';
 
@@ -25,17 +26,14 @@ class Search extends Component{
       you don't find a specific author or title. Every search is limited by search terms.
     */
     BooksAPI.search(query).then((books)=>{
+  		if(query !== this.state.query) return;
       if ('error' in books){
         books=[]
       }
       else {
-        /*
-+				 * Since the search API didn't return the shelf property for a book this will compare with
-+				 * memory mapped books from the shelves to include the correct shelf attribute.
-+				 */
 				books.map(book => (this.props.searchResult.filter((b) => b.id === book.id).map(b => book.shelf = b.shelf)));
       }
-      this.setState({books:books});
+      this.setState({books:books.sort(sortBy('title'))});
     })
   }
   render(){
