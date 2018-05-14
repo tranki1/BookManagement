@@ -1,7 +1,32 @@
-import React, {Component} from 'react'
-import PropTypes from 'props-types'
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
-clas Bookshelf extends Component{
+const SHELF_TYPE_IDS = [
+  'currentlyReading',
+  'read',
+  'wantToRead',
+];
+
+const SHELF_TYPE_NAMES = [
+  'Currently Reading',
+  'Read',
+  'Want To Read',
+];
+
+export const getShelfTypes = () => SHELF_TYPE_IDS;
+export const getShelfTypeName = (typeID) => {
+  const TypeInternalIndex = SHELF_TYPE_IDS.indexOf(typeID);
+
+  if (TypeInternalIndex === -1) {
+		// If Category doesn't exists returns ''
+	return '';
+  }
+
+	return SHELF_TYPE_NAMES[TypeInternalIndex];
+};
+
+class Bookshelf extends Component{
+
   render(){
     const {books, updateBook, typeOfShelves} = this.props;
     return(
@@ -16,8 +41,8 @@ clas Bookshelf extends Component{
                     onChange ={(e)=> updateBook(book,e.target.value)}
                     value={book.shelf}>
                     <option disabled>Move to...</option>
-                    {typeOfShelves.map((shelf)=>(
-                      <option key={shelf.id} value={shelf.id}>{shelf.name}</option>
+                    {getShelfTypes().map((shelf)=>(
+                      <option key={shelf} value={shelf}>{getShelfTypeName(shelf)}</option>
                     ))}
                     <option value="none">None</option>
                   </select>
@@ -28,17 +53,15 @@ clas Bookshelf extends Component{
             </div>
           </li>
         ))}
-
-
+      </ol>
     )
   }
 }
 
-Bookshelf.PropTypes ={
+Bookshelf.propTypes = {
   books: PropTypes.array.isRequired,
-  typeOfShelves: PropTypes.array.isRequired,
+  typeID: PropTypes.oneOf(SHELF_TYPE_IDS),
   updateBook: PropTypes.func.isRequired
-
 }
 
 export default Bookshelf;
