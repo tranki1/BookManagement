@@ -1,5 +1,7 @@
 {
+
   "dependencies": {
+    "homepage":"https://tranki1.github.io/BookManagement/",
     "material-ui": "^0.20.1",
     "prop-types": "^15.6.1",
     "react": "^16.3.2",
@@ -10,12 +12,15 @@
     "sortby": "0.0.2"
   },
   "devDependencies": {
+    "gh-pages": "^1.1.0",
     "react-scripts": "1.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   }
 }
