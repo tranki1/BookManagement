@@ -2,9 +2,13 @@ import React from 'react'
 import { Link, Route} from 'react-router-dom'
 import sortBy from 'sort-by'
 import * as BooksAPI from './BooksAPI'
-import Bookshelf, {getShelfTypes,getShelfTypeName} from './Component/Bookshelf'
+import Bookshelf, {getShelfTypes} from './Component/Bookshelf'
 import Search from './Component/Search'
 import './App.css'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import AppBar from 'material-ui/AppBar';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 
 
 /**
@@ -43,6 +47,7 @@ class BooksApp extends React.Component {
 
   render() {
     return (
+      <MuiThemeProvider>
       <div className="app">
         <Route path="/search" render={({history})=> (
           <Search
@@ -53,14 +58,16 @@ class BooksApp extends React.Component {
 
         <Route exact path='/' render={()=>(
           <div className="list-books">
-            <div className="list-books-title">
-              <h1>Book Management Tool</h1>
-            </div>
+            <AppBar
+              title="Book Management Tool"
+              iconClassNameRight="muidocs-icon-navigation-expand-more"
+              />
+
             <div className="list-books-content">
               <div>
                 {getShelfTypes().map((shelf)=>(
                   <div key='shelf' className="bookshelf">
-                    <h2 className="bookshelf-title">{getShelfTypeName(shelf)}</h2>
+                    <br/>
                     <Bookshelf
                       books={this.state.books.filter((book) => book.shelf===shelf).sort(sortBy('title'))}
                       typeID={shelf}
@@ -74,12 +81,18 @@ class BooksApp extends React.Component {
               <Link
                 to='/search'
                 className='add-books'
-              >Add a book</Link>
+              >
+                <FloatingActionButton>
+                		<ContentAdd />
+                </FloatingActionButton>
+              </Link>
+
             </div>
           </div>
         )}/>
 
       </div>
+      </MuiThemeProvider>
     )
   }
 }
