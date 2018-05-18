@@ -15,6 +15,8 @@ import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui
 import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
 import SelectField from 'material-ui/SelectField';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
+import Dialog from 'material-ui/Dialog';
+import FlatButton from 'material-ui/FlatButton';
 
 const styles = {
 	block: {
@@ -67,7 +69,21 @@ class Bookshelf extends Component{
   static shelfTypes=['none',]
   state= {
     selectType:false,
-    selectedBooks:[]
+    selectedBooks:[],
+    dialogOpen: false
+  }
+  handleDialogOpen = () => {
+    this.setState({dialogOpen: true});
+  };
+
+  handleDialogClose = () => {
+    this.setState({dialogOpen: false});
+  };
+  clearShelf = () => {
+    let onUpdateBook = this.props.onUpdateBook;
+    this.props.books.forEach(function(book){
+      onUpdateBook(book,'none');
+    });
   }
   turnOnSelectType = () => {
     if (!this.state.selectType) {
@@ -77,7 +93,7 @@ class Bookshelf extends Component{
   }
   turnOffSelectType =()=> {
     if (this.state.selectType){
-      console.log('turn of selectType')
+      console.log('turn off selectType')
       this.setState({selectType:false, selectedBooks:[]})
     }
   }
@@ -109,11 +125,26 @@ class Bookshelf extends Component{
   }
   render(){
     const {books, onUpdateBook} = this.props;
+    const dialogActions = [
+      <FlatButton
+        label="Cancel"
+        style={styles.button}
+        onClick={this.handleDialogClose}
+      />,
+      <FlatButton
+        label="Confirm"
+        backgroundColor="#FF9584"
+				hoverColor="#FF583D"
+				style={styles.button}
+        keyboardFocused={true}
+        onClick={this.clearShelf}
+      />,
+    ];
     return(
       <div>
         <Toolbar>
           <ToolbarGroup>
-            <ToolbarTitle text={getShelfTypeName(this.props.typeID)}/>
+            <ToolbarTitle text={getShelfTypeName(this.props.typeID)+ " ("+(this.props.books.length)+")"}/>
           </ToolbarGroup>
           <ToolbarGroup>
             <ToolbarSeparator/>
@@ -125,8 +156,9 @@ class Bookshelf extends Component{
                     </IconButton>
                   }
                 >
-                  <MenuItem primaryText="Select Books" onClick={this.turnOnSelectType}/>
-                  <MenuItem primaryText="Clear"/>
+                  <MenuItem primaryText="Move Books" onClick={this.turnOnSelectType}/>
+                  <MenuItem primaryText="Clear Shelf" onClick={this.handleDialogOpen}/>
+
                 </IconMenu>
               }
               {this.state.selectType &&
@@ -136,6 +168,15 @@ class Bookshelf extends Component{
               }
           </ToolbarGroup>
         </Toolbar>
+        <Dialog
+          title="Confirm clear shelf action"
+          actions={dialogActions}
+          modal={true}
+          open={this.state.dialogOpen}
+          onRequestClose={this.handleDialogClose}
+        >
+          Do you really want to clear all book from {getShelfTypeName(this.props.typeID)} shelf?
+        </Dialog>
         <ol>
           <CSSTransitionGroup
             transitionName='book-select-mode'
