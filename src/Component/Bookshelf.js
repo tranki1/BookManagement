@@ -15,10 +15,10 @@ import {Toolbar, ToolbarGroup, ToolbarSeparator, ToolbarTitle} from 'material-ui
 import NavigationExpandMoreIcon from 'material-ui/svg-icons/navigation/expand-more';
 import SelectField from 'material-ui/SelectField';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
 import DotsLoader from '../icons/loaders/dots.svg';
 import LoaderBox from './Loader';
+import '../App.css';
+import ConfirmDialog from './ConfirmDialog';
 
 const styles = {
 	block: {
@@ -129,20 +129,7 @@ class Bookshelf extends Component{
   }
   render(){
     const {books, onUpdateBook} = this.props;
-    const dialogActions = [
-      <FlatButton
-        label="Cancel"
-        style={styles.button}
-        onClick={this.handleDialogClose}
-      />,
-      <FlatButton
-        label="Confirm"
-        backgroundColor="#FF9584"
-				hoverColor="#FF583D"
-				style={styles.button}
-        onClick={this.clearShelf}
-      />,
-    ];
+
     return(
       <div>
         <Toolbar>
@@ -172,14 +159,15 @@ class Bookshelf extends Component{
               }
           </ToolbarGroup>
         </Toolbar>
-        <Dialog
+        <ConfirmDialog
           title={"Confirm clear shelf action"}
-          actions={dialogActions}
-          modal={true}
+          message={'Do you really want to clear all book from '+ getShelfTypeName(this.props.typeID) +' shelf?'}
+          onCancel={this.handleDialogClose}
+          onConfirm={this.clearShelf}
           open={this.state.dialogOpen}
         >
-          Do you really want to clear all book from "{getShelfTypeName(this.props.typeID)}" shelf?
-        </Dialog>
+
+        </ConfirmDialog>
 
         <div className="shelf-loader-box">
 					<LoaderBox loading={this.props.loading} size={70} message="Loading Books" />
