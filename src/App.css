@@ -293,3 +293,28 @@ html, body {
   height: 0;
   transition: 300ms;
 }
+
+/* Loader */
+
+.shelf-loader-box{
+  text-align: center;
+  margin-top: 30px;
+}
+
+.loader-shelf-menu{
+  margin-left: 10px;
+}
+
+.loader-box-svg{
+  color: #2980b9;
+  width: 100px;
+  height: 100px;
+  height: 100px;
+  display:inline-block;}
+
+  /* Shelf message (No books, No internet) */
+.shelf-message-text{
+  text-align: center;
+  margin-top: 100px;
+  height: 80px;
+}

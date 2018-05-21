@@ -11,6 +11,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
 
+
 /**
  * @description Main App component.
  * @constructor
@@ -19,13 +20,13 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 class BooksApp extends React.Component {
   state = {
     books: [],
-    showSearchPage: false
+    loadingData:true,
   }
 
   componentDidMount() {
     //Get books through gbs_api
     BooksAPI.getAll().then((data)=>{
-      this.setState({books:data});
+      this.setState({books:data,loadingData:false});
       console.log(data);
     });
   }
@@ -72,6 +73,7 @@ class BooksApp extends React.Component {
                       books={this.state.books.filter((book) => book.shelf===shelf).sort(sortBy('title'))}
                       typeID={shelf}
                       onUpdateBook={this.updateBook}
+                      loading={this.state.loadingData}
                     />
                   </div>
                 ))}

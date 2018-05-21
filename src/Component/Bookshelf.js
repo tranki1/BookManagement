@@ -17,6 +17,8 @@ import SelectField from 'material-ui/SelectField';
 import NavigationClose from 'material-ui/svg-icons/navigation/close';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import DotsLoader from '../icons/loaders/dots.svg';
+import LoaderBox from './Loader';
 
 const styles = {
 	block: {
@@ -84,7 +86,9 @@ class Bookshelf extends Component{
     this.props.books.forEach(function(book){
       onUpdateBook(book,'none');
     });
-  }
+    this.handleDialogClose();
+  };
+
   turnOnSelectType = () => {
     if (!this.state.selectType) {
       console.log ('turn on selectType')
@@ -136,7 +140,6 @@ class Bookshelf extends Component{
         backgroundColor="#FF9584"
 				hoverColor="#FF583D"
 				style={styles.button}
-        keyboardFocused={true}
         onClick={this.clearShelf}
       />,
     ];
@@ -148,7 +151,8 @@ class Bookshelf extends Component{
           </ToolbarGroup>
           <ToolbarGroup>
             <ToolbarSeparator/>
-              {!this.state.selectType &&
+              <LoaderBox loading={this.props.loading} size={50} type="circle" className="loader-shelf-menu" />
+              {!this.state.selectType && !this.props.loading && (books.length>0) &&
                 <IconMenu
                   iconButtonElement={
                     <IconButton touch={true}>
@@ -156,8 +160,8 @@ class Bookshelf extends Component{
                     </IconButton>
                   }
                 >
-                  <MenuItem primaryText="Move Books" onClick={this.turnOnSelectType}/>
-                  <MenuItem primaryText="Clear Shelf" onClick={this.handleDialogOpen}/>
+                  <MenuItem primaryText="Move books" onClick={this.turnOnSelectType}/>
+                  <MenuItem primaryText="Clear shelf" onClick={this.handleDialogOpen}/>
 
                 </IconMenu>
               }
@@ -169,14 +173,18 @@ class Bookshelf extends Component{
           </ToolbarGroup>
         </Toolbar>
         <Dialog
-          title="Confirm clear shelf action"
+          title={"Confirm clear shelf action"}
           actions={dialogActions}
           modal={true}
           open={this.state.dialogOpen}
-          onRequestClose={this.handleDialogClose}
         >
-          Do you really want to clear all book from {getShelfTypeName(this.props.typeID)} shelf?
+          Do you really want to clear all book from "{getShelfTypeName(this.props.typeID)}" shelf?
         </Dialog>
+
+        <div className="shelf-loader-box">
+					<LoaderBox loading={this.props.loading} size={70} message="Loading Books" />
+				</div>
+
         <ol>
           <CSSTransitionGroup
             transitionName='book-select-mode'
@@ -224,6 +232,11 @@ class Bookshelf extends Component{
               </div>
             </div>}
           </CSSTransitionGroup>
+          { (books.length===0) && !(this.props.loading) &&
+            <div className="shelf-message-text">
+              No books available
+            </div>
+          }
           <CSSTransitionGroup
     					transitionName="book-transition"
     					className="books-grid"
@@ -235,7 +248,7 @@ class Bookshelf extends Component{
                   <div className="book-top">
                     <Loader
                       show={('loading' in book)? book.loading : false}
-                      message={<span><img src="../public/three-dots.svg" width="50" alt=""/><div>Loading</div></span>}>
+                      message={<span><img src={DotsLoader} width="50" alt=""/><div>Loading</div></span>}>
                       <div className="book-cover" style={{
                         width: 128,
                         height: 193,
@@ -266,12 +279,13 @@ class Bookshelf extends Component{
 											transitionName="book-transition"
 											transitionEnterTimeout={500}
 											transitionLeaveTimeout={500}>
-											{!this.state.selectType && !(('updating' in book) ? book.updating : false) && <div>
+											{!this.state.selectType && !(('updating' in book) ? book.updating : false) &&
+                      <div>
 												<div className="book-shelf-changer">
 													<IconMenu
+                              value={this.state.value}
 														  onChange={(event, value) => {
-															console.log(value.key);
-															onUpdateBook(book, value.key);
+															onUpdateBook(book, value);
 														}}
 														iconButtonElement={<FloatingActionButton mini={true}>
 															<NavigationExpandMoreIcon />
@@ -308,7 +322,8 @@ class Bookshelf extends Component{
 Bookshelf.propTypes = {
   books: PropTypes.array.isRequired,
   typeID: PropTypes.oneOf(SHELF_TYPE_IDS),
-  onUpdateBook: PropTypes.func.isRequired
+  onUpdateBook: PropTypes.func.isRequired,
+  loading:PropTypes.bool
 }
 
 export default Bookshelf;
